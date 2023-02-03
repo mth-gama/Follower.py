@@ -1,1 +1,9 @@
-#ESTA ÁREA É DETINADA A TESTES PARA IMPLEMENTAR O CÓDIGO PRINCIPAL
+meuArquivo = open('config.txt', 'r')
+bandas = meuArquivo.readlines()
+
+for banda in bandas:
+    banda = banda.rstrip('\n')
+    print(banda)
+
+print(bandas)
+meuArquivo.close()
