@@ -25,16 +25,16 @@ class Instagram_bot ():
         self.color3 = '#262626' #Light Gray Inputs
         self.color4 = '#ff254a' #Purple Detals
         self.color5 = '#ffca00' #Yellow 
-       
+        self.root_config = None
         
         self.window()
         
     def window(self):
         self.root = Tk()
-        self.root.geometry(center(self.root,600,570))
+        self.root.geometry(center(self.root,600,610))
         self.root.config(bg=self.color1)
         self.root.title('Followers Bot')
-        #self.root.iconbitmap('img\icon.ico')
+        self.root.iconbitmap('img\icon.ico')
         self.containers()
         self.itens_container1()
         self.itens_container2()
@@ -42,6 +42,16 @@ class Instagram_bot ():
     
     def containers(self):
         self.img_logo = PhotoImage(file=f'img\LOGO.png')
+        self.img_btn_config = PhotoImage(file=r'img\btn_config.png')
+        self. btn_config = Button(
+            self.root,
+            bg=self.color1,
+            height=25,
+            border=0,
+            image=self.img_btn_config,
+            activebackground=self.color1,
+            command=self.window_config
+        )
         self.lb_title = Label(
             self.root,
             image= self.img_logo,
@@ -62,7 +72,7 @@ class Instagram_bot ():
             height= 300,
             bg=self.color1
         )
-        
+        self. btn_config.pack(anchor=E, padx=10, pady=5)
         self.fr_container01.propagate(0)
         self.fr_container02.propagate(0)
         self.lb_title.pack()
@@ -260,7 +270,150 @@ class Instagram_bot ():
             self.tx_output.insert(END, f'\nHOUVE ALGUM ERRO DESCONHECIDO NO MOMENTO DE GRAVAR OS DADOS NO EXCEL\n')
             self.tx_output.insert(END, '-'*65)
     
-    @pysnooper.snoop()
+    def window_config(self):
+        if self.root_config is None:
+            self.root_config = Tk()
+            self.root_config.protocol("WM_DELETE_WINDOW", self.fecha_jan)
+            self.root_config.geometry(center(self.root_config, 500, 300))
+            self.root_config.title('Configuration')
+            self.root_config.resizable(False, False)
+            self.root_config.iconbitmap('img\icon.ico')
+            self.root_config.config(bg=self.color1)
+            
+            self.lb_btn_entrar = Label(
+                self.root_config,
+                text="Full XPath botão de entrar",
+                bg=self.color1,
+                fg=self.color3
+            )
+            
+            self.en_btn_entrar = Entry(
+                self.root_config,
+                bg=self.color3,
+                width=60,
+                font='15',
+                fg='white',
+                bd=0
+            )
+            
+            self.lb_name_seg = Label(
+                self.root_config,
+                text="Full XPath nome do seguidor",
+                bg=self.color1,
+                fg=self.color3
+            )
+            
+            self.en_name_seg = Entry(
+                self.root_config,
+                bg=self.color3,
+                width=60,
+                font='15',
+                fg='white',
+                bd=0
+            )
+            
+            self.lb_txt_btn_seguir = Label(
+                self.root_config,
+                text="Full XPath texto botão seguir",
+                bg=self.color1,
+                fg=self.color3
+            )
+            
+            self.en_txt_btn_seguir = Entry(
+                self.root_config,
+                bg=self.color3,
+                width=60,
+                font='15',
+                fg='white',
+                bd=0
+            )
+            
+            self.lb_btn_seguir = Label(
+                self.root_config,
+                text="Full XPath botão seguir",
+                bg=self.color1,
+                fg=self.color3
+            )
+            
+            self.en_btn_seguir = Entry(
+                self.root_config,
+                bg=self.color3,
+                width=60,
+                font='15',
+                fg='white',
+                bd=0
+            )
+            
+            self.lb_btn_deixar_seg = Label(
+                self.root_config,
+                text="Full XPath botão deixar de seguir",
+                bg=self.color1,
+                fg=self.color3
+            )
+            
+            self.en_btn_deixar_seg = Entry(
+                self.root_config,
+                bg=self.color3,
+                width=60,
+                font='15',
+                fg='white',
+                bd=0
+            )
+            
+            self.btn_save_config = Button(
+                self.root_config,
+                bg=self.color4,
+                fg='white',
+                text="SALVAR",
+                command=self.salvar_informacoes_config,
+                activebackground=self.color5
+            )
+            
+            if os.path.exists('config.txt'):
+                #Lendo o arquivo
+                arquivo = open('config.txt','r')
+                info_login = []
+                for i in arquivo:
+                    i.replace('\n', '')
+                    info_login.append(i)
+                arquivo.close()
+                
+                # Removendo dados antes de colocar novos
+                self.en_btn_entrar.delete(0, END)
+                self.en_name_seg.delete(0, END)
+                self.en_txt_btn_seguir.delete(0, END)
+                self.en_btn_deixar_seg.delete(0, END)
+                
+                # Colocando os valores salvos
+                self.en_btn_entrar.insert(0, info_login[0])
+                self.en_name_seg.insert(0, info_login[1])
+                self.en_txt_btn_seguir.insert(0, info_login[2])
+                self.en_btn_seguir.insert(0, info_login[3])
+                self.en_btn_deixar_seg.insert(0, info_login[4])   
+            
+            #Colocando itens na jenela
+            self.lb_btn_entrar.pack(anchor=W, padx=10,pady=3)
+            self.en_btn_entrar.pack(anchor=W, padx=10)
+            self.lb_name_seg.pack(anchor=W, padx=10,pady=3)
+            self.en_name_seg.pack(anchor=W, padx=10)
+            # self.lb_txt_btn_seguir.pack(anchor=W, padx=10,pady=3)
+            # self.en_txt_btn_seguir.pack(anchor=W, padx=10)
+            self.lb_btn_seguir.pack(anchor=W, padx=10,pady=3)
+            self.en_btn_seguir.pack(anchor=W, padx=10)
+            self.lb_btn_deixar_seg.pack(anchor=W, padx=10,pady=3)
+            self.en_btn_deixar_seg.pack(anchor=W, padx=10)
+            self.btn_save_config.pack(anchor=E, padx=10,pady=3)
+            
+        else:
+            # Se já foi, basta colocá-la na frente
+            self.root_config.lift()
+            
+    def fecha_jan(self):
+        # Seta de novo em None para recriar quando abrir
+        self.root_config.destroy()
+        self.root_config = None   
+        
+    #@pysnooper.snoop()
     def login(self):
         #Validando campos
         if (self.en_usuario.get() == '')|(self.en_senha.get() == '')|(self.en_perfil_concorrente.get() == '')|(self.en_qtd_user.get() == ''):
@@ -269,7 +422,7 @@ class Instagram_bot ():
             pg.alert('Existem campos obrigatórios vazios!')
         elif self.en_qtd_user.get().isnumeric() == False:
             pg.alert('O campo de quantidade de usuários só aceita números')
-        elif int(self.en_qtd_user.get()) > 100:
+        elif int(self.en_qtd_user.get()) > 10000:
             pg.alert('O limite máximo é até 100 por vez')
             
         else:
@@ -281,8 +434,19 @@ class Instagram_bot ():
             tentativas = 0
             self.salvar_informacoes()
             self.calc_tempo_script()
+            
+            if os.path.exists('config.txt'):
+                #Lendo o arquivo
+                arquivo = open('config.txt','r')
+                info_login = []
+                isa = 0
+                for linha in arquivo:
+                    linha.rstrip('\n')
+                    info_login.append(linha)
+                    
+                arquivo.close()
+            
             self.driver = Chrome(executable_path='chromedriver.exe')
-            #self.driver.maximize_window()
             self.usuario = self.en_usuario.get()
             self.senha = self.en_senha.get()
             self.perfil_concorrente = self.en_perfil_concorrente.get()
@@ -294,7 +458,7 @@ class Instagram_bot ():
             self.password = self.driver.find_element(By.NAME,'password').send_keys(self.senha)
             time.sleep(2)
             try:
-                self.btn_entrar = self.driver.find_element(By.XPATH, '/html/body/div[2]/div/div/div/div[1]/div/div/div/div[1]/section/main/article/div[2]/div[1]/div[2]/form/div/div[3]/button').click()        
+                self.btn_entrar = self.driver.find_element(By.XPATH, f''+info_login[0]).click()        
             except:
                 pass
             time.sleep(15)
@@ -307,23 +471,23 @@ class Instagram_bot ():
                 tempo = tempo +1
                   
                 
-                self.name_seg = self.driver.find_element(By.XPATH, f'/html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[2]/div[1]/div/div[{i}]/div[2]/div[1]/div/div/div/span/a/span/div').text
+                self.name_seg = self.driver.find_element(By.XPATH, f''+info_login[1]).text
                 
-                self.txt_btn_seguir = self.driver.find_element(By.XPATH, f'/html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[2]/div[1]/div/div[{i}]/div[3]/button').text
+                self.txt_btn_seguir = self.driver.find_element(By.XPATH, f''+info_login[2]).text
                 
                 if str(self.txt_btn_seguir) != 'Seguindo':
                         self.tx_output.insert(END, f'\nPESSOA: {str(self.name_seg)}\n')
                         
                         try:
-                            self.btn_seguir = self.driver.find_element(By.XPATH, f'/html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[2]/div[1]/div/div[{i}]/div[3]/button').click()
+                            self.btn_seguir = self.driver.find_element(By.XPATH, f''+info_login[2]).click()
                             time.sleep(5)
-                            self.txt_btn_seguir = self.driver.find_element(By.XPATH, f'/html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[2]/div[1]/div/div[{i}]/div[3]/button/div/div').text
+                            self.txt_btn_seguir = self.driver.find_element(By.XPATH, f''+info_login[2]).text
 
                             if str(self.txt_btn_seguir) == 'Solicitado':
                                 self.tx_output.insert(END, f'\nO perfil {self.name_seg} é privado, deixando de seguir...\n')
-                                self.btn_seguir = self.driver.find_element(By.XPATH, f'/html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[2]/div[1]/div/div[{i}]/div[3]/button').click()  
+                                self.btn_seguir = self.driver.find_element(By.XPATH, f''+info_login[2]).click()  
                                 time.sleep(10)
-                                self.btn_deixar_seg = self.driver.find_element(By.XPATH, f'/html/body/div[2]/div/div/div/div[2]/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/button[1]').click()
+                                self.btn_deixar_seg = self.driver.find_element(By.XPATH, f''+info_login[4]).click()
                                 
                                 
                             elif str(self.txt_btn_seguir) == 'Seguindo':
@@ -370,6 +534,21 @@ class Instagram_bot ():
         else:
             print('USUÁRIO DESEJOU NÃO SALVAR AS INFORMAÇÕES')
     
+    def salvar_informacoes_config(self):
+        btn_entrar = self.en_name_seg.get().replace('\n','')
+        name_seg = self.en_name_seg.get().replace('\n','')
+        txt_btn_seguir = self.en_txt_btn_seguir.get().replace('\n','')
+        btn_seguir = self.en_btn_seguir.get().replace('\n','')
+        btn_deixar_seg = self.en_btn_deixar_seg.get().replace('\n','')
+        
+
+        arquivo = open('config.txt','w')
+        arquivo.write(f"{btn_entrar}")
+        arquivo.write(f"\n{name_seg}")
+        arquivo.write(f"\n{txt_btn_seguir}")
+        arquivo.write(f"\n{btn_seguir}")
+        arquivo.write(f"\n{btn_deixar_seg}")
+        
     def calc_tempo_script(self):
         if int(self.en_qtd_user.get()) < 10:
             self.tempo_estimado.set('Tempo estimado: 10')
